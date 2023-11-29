@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import helmet from "helmet"
 import compression from "compression";
+// import 'module-alias/register';
 const app = express();
 
 
@@ -16,6 +17,10 @@ app.use(helmet()) // giúp bảo mật app bên server bằng cách đặt các 
 app.use(compression()) // giảm băng thông
 
 //---------------init db------------------
+import {instanceMongodb} from '@/db'
+instanceMongodb
+import {checkOverLoad} from '@/helpers'
+checkOverLoad();
 
 //---------------init routes-----------------
 app.get('/',(req,res,next)=>{

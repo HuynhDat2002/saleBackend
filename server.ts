@@ -1,4 +1,5 @@
-import app from "./src/app.js";
+import 'module-alias/register';
+import app from "@/app";
 
 const PORT =3000
 
