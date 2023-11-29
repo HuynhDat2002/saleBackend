@@ -19,8 +19,8 @@ app.use(compression()) // giảm băng thông
 //---------------init db------------------
 import {instanceMongodb} from '@/db'
 instanceMongodb
-import {checkOverLoad} from '@/helpers'
-checkOverLoad();
+// import {checkOverLoad} from '@/helpers'
+// checkOverLoad();
 
 //---------------init routes-----------------
 app.get('/',(req,res,next)=>{

@@ -1,10 +1,11 @@
 import 'module-alias/register';
 import app from "@/app";
+import  'dotenv/config';
+// dotenv.config(); // .env
 
-const PORT =3000
 
-const server = app.listen(PORT,()=>{
-    console.log(`Server starting on port ${PORT}`)
+const server = app.listen(process.env.PORT,()=>{
+    console.log(`Server starting on port ${process.env.PORT}`)
 })
 
 process.on('SIGINT',()=>{

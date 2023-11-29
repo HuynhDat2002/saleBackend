@@ -2,8 +2,12 @@
 
 import mongoose from "mongoose";
 import { countConnect } from "@/helpers";
+import {config} from '@/configs'
 
-const connectString = "mongodb://localhost:27017/shop";
+//level0
+ const {host,port,name}=config.db;
+ const connectString = `mongodb://${host}:${port}/${name}`;
+ console.log(connectString)
 
 class Database {
     private static instance: Database|null =null;

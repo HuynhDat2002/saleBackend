@@ -3,7 +3,7 @@
 import mongoose from "mongoose"
 import os from "os"
 import process from "process"
-const _SECONDS=5000;
+const _SECONDS=10000;
 
 // count connect
 const countConnect=()=>{
@@ -24,7 +24,7 @@ const checkOverLoad = ()=>{
         console.log(`Max connections: ${maxConnections}`)
         if(numConnections>maxConnections) console.log(`Connection oveload detected!`)
 
-    },_SECONDS) //monitor every 5 seconds
+    },_SECONDS) //monitor every 10 seconds
 }
 
 export {countConnect,checkOverLoad}
