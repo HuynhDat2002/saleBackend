@@ -1,4 +1,4 @@
-import config from './config.mongodb'
+import config from './mongodb.config'
 
 export {
     config

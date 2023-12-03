@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug nodemon",
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "protocol": "inspector",
+            
+            "localRoot": "${workspaceFolder}/dist",
+            "remoteRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+      
+    ]
+}
