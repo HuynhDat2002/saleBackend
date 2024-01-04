@@ -6,7 +6,7 @@ import {config} from '@/configs'
 
 //level0
  const {host,port,name}=config.db;
- const connectString = `mongodb://${host}:${port}/${name}`;
+ const connectString = `mongodb+srv://${host}@cluster0.pmrwqoh.mongodb.net/${name}`;
  console.log(connectString)
 
 class Database {

@@ -1,5 +1,6 @@
 'use strict'
 
+import { asyncHandler } from '@/auth';
 import express from 'express'
 const router=express.Router();
 

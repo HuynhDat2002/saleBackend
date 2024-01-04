@@ -4,6 +4,7 @@
 import {Request,Response,NextFunction} from 'express'
 import { apiKeyService } from '@/services'
 import { CustomRequest } from '@/types'
+import { ErrorResponse } from '@/core/error.response'
 
 const HEADER = {
     API_KEY : 'x-api-key',
@@ -51,5 +52,11 @@ export const permissions = (permission:string)=>{
         }
 
         return next();
+    }
+}
+
+export const asyncHandler =(fn: (req: Request, res: Response, next: NextFunction) =>Promise<any> )  =>{
+    return (req:Request,res:Response,next:NextFunction)=>{
+fn(req,res,next).catch(error=>next(error));
     }
 }

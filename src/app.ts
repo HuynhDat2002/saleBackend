@@ -1,4 +1,7 @@
 import express, { Application } from "express";
+import {Request,Response,NextFunction} from 'express'
+import { errorResponse } from "@/core";
+
 import morgan from "morgan";
 import helmet from "helmet"
 import compression from "compression";
@@ -42,7 +45,19 @@ instanceMongodb
 app.use('/',router)
 
 //handling error
+app.use((req:Request,res:Response,next:NextFunction)=>{
+    const error:any = new Error('Not Found')
+    error.status = 404;
+    next(error);
+})
+ app.use((error:any,req:Request,res:Response,next:NextFunction) => {
+     const status = error.status || 500;
+     return res.status(status).json({
+        status: "error",
+        code: status,
+        message:error.message,
+     })
 
-app.use()
+ })
 
 export default app ;

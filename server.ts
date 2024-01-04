@@ -4,8 +4,8 @@ import  'dotenv/config';
 // dotenv.config(); // .env
 
 
-const server = app.listen(process.env.PORT,()=>{
-    console.log(`Server starting on port ${process.env.PORT}`)
+const server = app.listen(process.env.DEV_APP_PORT,()=>{
+    console.log(`Server starting on port ${process.env.DEV_APP_PORT}`)
 })
 
 // process.on('SIGINT',()=>{

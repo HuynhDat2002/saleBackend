@@ -1,13 +1,16 @@
-
 'use strict'
+
+
+import {asyncHandler} from '@/auth'
+import {accessController} from '@/controllers'
+
 
 
 import express from 'express'
 const accessRouter=express.Router();
 
-import {accessController} from '@/controllers'
 
 //signUp
-accessRouter.post('/shop/signup',accessController.signUp)
+accessRouter.post('/shop/signup',asyncHandler(accessController.signUp))
 
 export default accessRouter

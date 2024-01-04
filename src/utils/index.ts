@@ -11,8 +11,6 @@ const getInfoData = (fields:string[],object={}) =>{
     return _.pick(object,fields)
 }
 
-
-
 export {
     getInfoData
 }
