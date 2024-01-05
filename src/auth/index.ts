@@ -1,9 +1,8 @@
 import { createTokenPair } from "./util.auth";
-import { apiKey,permissions,asyncHandler } from "./check.auth";
+import { apiKey,permissions } from "./check.auth";
 
 export {
     createTokenPair,
     apiKey,
     permissions,
-    asyncHandler
 }

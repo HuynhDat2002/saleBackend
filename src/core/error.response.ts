@@ -3,13 +3,17 @@
 const StatusCode = {
     FORBIDDEN:403,
     CONFLICT:409,
-    BADREQUEST:400
+    BADREQUEST:400,
+    AUTHFAILURE:401,
+    NOTFOUND:404
 }
 
 const ResponseStatusCode = {
     FORBIDDEN:'Forbidden error',
     CONFLICT:'Conflict error',
-    BADREQUEST:'Bad request error'
+    BADREQUEST:'Bad request error',
+    AUTHFAILURE:"Authentication error",
+    NOTFOUND:"Not Found"
 }
 
 export class ErrorResponse extends Error{
@@ -39,3 +43,16 @@ export class BadRequestError extends ErrorResponse{
         super(message,status)
     }
 }
+
+export class AuthFailureError extends ErrorResponse{
+    constructor(message = ResponseStatusCode.AUTHFAILURE,status = StatusCode.AUTHFAILURE){
+        super(message,status)
+    }
+}
+
+export class NotFound extends ErrorResponse{
+    constructor(message = ResponseStatusCode.NOTFOUND,status = StatusCode.NOTFOUND){
+        super(message,status)
+    }
+}
+

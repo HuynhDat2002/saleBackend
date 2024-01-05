@@ -1,14 +1,19 @@
-import { expressProps,AccessServiceSignUpProps } from "@/types";
-import {accessService} from "@/services"
-import { Request,Response,NextFunction } from "express";
+import { expressProps, AccessServiceSignUpProps } from "@/types";
+import { accessService } from "@/services";
+import { Request, Response, NextFunction } from "express";
+import { successResponse } from "@/core";
+import {CustomRequest} from '@/types'
 
-export const signUp=async (req:Request,res:Response,next:NextFunction)=>{
-   
-        console.log("alo")
-        console.log(req.body)
-        const {name="",password="",email=""}:AccessServiceSignUpProps=req.body ||{};
-        console.log("")
-        await accessService.signUp(req.body);
+export const signUp = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    new successResponse.CREATED({
+        message: "Registed OK",
+        metadata: await accessService.signUp(req.body)
+    }).send(res);
+
     // }
     // catch (e){
     //     // if (next) {
@@ -18,5 +23,24 @@ export const signUp=async (req:Request,res:Response,next:NextFunction)=>{
     //     // }
     //     console.log(e);
     // }
+};
+
+export const login = async (req: Request,
+    res: Response,
+    next: NextFunction) => {
+    new successResponse.SuccessResponse({
+        message: "Login successfully",
+        metadata: await accessService.login(req.body)
+    }).send(res);
 }
 
+export const logout = async (req: CustomRequest,
+    res: Response,
+    next: NextFunction) => {
+        if(req.keyStore){
+            new successResponse.SuccessResponse({
+                message: "Logout successfully",
+                metadata: await accessService.logout(req.keyStore)
+            }).send(res);
+        }
+}

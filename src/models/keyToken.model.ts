@@ -20,9 +20,13 @@ const keyTokenSchema = new Schema({
         type:String,
         required:true
     },
-    refreshToken:{ // pick những hacker truy cập trái phép 
+    refreshTokensUsed:{ // pick những hacker truy cập trái phép 
         type:Array,
         default:[]
+    },
+    refreshToken:{
+        type:String,
+        required:true,
     }
     
 },{
