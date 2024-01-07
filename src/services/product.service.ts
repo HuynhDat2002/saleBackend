@@ -167,7 +167,7 @@ export const findProduct = async (id:string) =>{
     return await productRepository.findProduct({id:id,unSelect:['__v']});
 }
 export const updateProduct = async (productId:string) =>{
-    return await productRepository.updateProduct(keySearch);
+    return await productRepository.updateProduct();
 }
 
 
