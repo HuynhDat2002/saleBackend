@@ -1,11 +1,12 @@
+
 ("use strict");
 import { getInfoData } from "@/utils";
-import { createTokenPair } from "@/auth";
+import { createTokenPair,verifyJwt } from "@/auth";
 import { errorResponse } from "@/core";
 import shopModel from "@/models/shop.model";
 
-import { AccessServiceSignUpProps, KeyStoreModelProps } from "@/types";
-import { AccessServiceSignInProps } from "@/types";
+import { AccessServiceSignUpProps, KeyStoreModelProps,HandleRefreshTokenV2Props } from "@/types";
+import { AccessServiceSignInProps,PayloadTokenPair } from "@/types";
 
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -72,12 +73,12 @@ export const signUp = async ({
         });
         console.log(`Create Token Success: `, tokens);
 
-        const keyStore: string = await keyTokenService.createKeyToken(
-            newShop._id.toString(),
-            publicKey,
-            privateKey,
-            tokens.refreshToken,
-        );
+        const keyStore: string = await keyTokenService.createKeyToken({
+            userId:newShop._id.toString(),
+            publicKey: publicKey, 
+            privateKey:privateKey, 
+            refreshToken:tokens.refreshToken
+    });
 
         if (!keyStore) {
             return {
@@ -118,11 +119,11 @@ export const signUp = async ({
 // 5. get data return login
 export const login = async ({ email, password, refreshToken }: AccessServiceSignInProps) => {
     //1.
-    const foundUser = await shopService.findByEmail({ email });
-    if (!foundUser) throw new errorResponse.BadRequestError("Error: User not found")
+    const foundShop = await shopService.findByEmail({ email });
+    if (!foundShop) throw new errorResponse.BadRequestError("Error: Shop not found")
 
     //2.
-    const matchPassword = bcrypt.compare(password, foundUser.password);
+    const matchPassword = bcrypt.compare(password, foundShop.password);
     if (!matchPassword) throw new errorResponse.AuthFailureError("Password not match");
 
     //3.
@@ -131,16 +132,21 @@ export const login = async ({ email, password, refreshToken }: AccessServiceSign
 
 
     const tokens:TokenPairProps = await createTokenPair({
-        payload: { userId: foundUser._id.toString(), email },
+        payload: { userId: foundShop._id.toString(), email },
         publicKey: publicKey,
         privateKey: privateKey
     });
 
     //4.
-    await keyTokenService.createKeyToken(foundUser._id.toString(), publicKey, privateKey, tokens.refreshToken);
+    await keyTokenService.createKeyToken({
+        userId:foundShop._id.toString(),
+        publicKey: publicKey, 
+        privateKey:privateKey, 
+        refreshToken:tokens.refreshToken
+    });
 
     return {
-        user: getInfoData(['_id', 'name', 'email'], foundUser),
+        shop: getInfoData(['_id', 'name', 'email'], foundShop),
         tokens
     }
 
@@ -151,4 +157,88 @@ export const logout = async (keyStore: KeyStoreModelProps) => {
     const delKey = await keyTokenService.removeKeyById(keyStore._id.toString())
     return delKey;
 
+}
+
+
+//1. check this token used?
+export const handleRefreshToken = async (refreshToken:string)=>{
+    // check if token has been used
+    const foundToken =await keyTokenService.findByRefreshTokenUsed(refreshToken)
+    //if it has been used
+    if(foundToken){
+        // decode to see who you are
+        const verifyToken = await verifyJwt({token:refreshToken,keySecret:foundToken.privateKey})
+        if(typeof verifyToken==="object"){
+            //delete all of token in keyStore
+            const deleteToken = await keyTokenService.deleteTokenById(verifyToken.userId)
+            throw new errorResponse.ForbiddenRequestError("Something wrong happed! Please login again")
+        } 
+
+    }
+
+    const holderToken = await keyTokenService.findByRefreshToken(refreshToken)
+    if(!holderToken) throw new errorResponse.AuthFailureError("User not registered");
+
+    // verifyToken
+    const verifyTokenHolder:PayloadTokenPair|string = await verifyJwt({token:refreshToken,keySecret:holderToken.privateKey})
+        if(typeof verifyTokenHolder==="object"){
+            //check userid
+            const email:string= verifyTokenHolder.email as string
+            const userId:string= verifyTokenHolder.userId as string
+
+            const foundUser = await shopService.findByEmail({email})
+            if(!foundUser) throw new errorResponse.AuthFailureError("User not registered");
+
+            //create a new pair of token
+            const newToken = await createTokenPair({
+                payload:{userId,email},
+                publicKey:holderToken.publicKey,
+                privateKey:holderToken.privateKey,
+            });
+            const updateToken = await keyTokenService.updateRefreshToken({
+             oldRefreshToken:refreshToken,
+             newRefreshToken:newToken.refreshToken,
+            });
+            return {
+                user:{userId,email},
+                newToken,
+            }
+        } 
+        return {}
+}
+
+export const handleRefreshTokenV2 = async ({refreshToken,keyStore,user}:HandleRefreshTokenV2Props)=>{
+
+    const userId:string = user.userId as string;
+    const email:string =user.email as string;
+
+    // check if token has been used
+    if(keyStore.refreshTokensUsed?.includes(refreshToken)){
+        
+        //delete all of token in keyStore
+        const deleteToken = await keyTokenService.deleteTokenById(userId)
+        throw new errorResponse.ForbiddenRequestError("Something wrong happed! Please login again")
+        
+    }
+    
+    if(keyStore.refreshToken!==refreshToken) throw new errorResponse.AuthFailureError("User not registered")
+
+   
+    const foundUser = await shopService.findByEmail({email})
+    if(!foundUser) throw new errorResponse.AuthFailureError("User not registered");
+
+    //create a new pair of token
+    const newToken = await createTokenPair({
+        payload:{userId,email},
+        publicKey:keyStore.publicKey,
+        privateKey:keyStore.privateKey,
+    });
+    const updateToken = await keyTokenService.updateRefreshToken({
+     oldRefreshToken:refreshToken,
+     newRefreshToken:newToken.refreshToken,
+    });
+    return {
+        user,
+        newToken,
+    }
 }

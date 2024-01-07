@@ -1,9 +1,10 @@
+
 'use strict'
 
 
 import {asyncHandler} from '@/helpers'
 import {accessController} from '@/controllers'
-import {authentication} from '@/auth/util.auth'
+import {authentication,authenticationV2} from '@/auth/util.auth'
 
 
 
@@ -12,14 +13,16 @@ const accessRouter=express.Router();
 
 
 //signUp
-accessRouter.post('/shop/signup',asyncHandler(accessController.signUp))
+accessRouter.post('/signup',asyncHandler(accessController.signUp))
 //login
-accessRouter.post('/shop/login',asyncHandler(accessController.login));
+accessRouter.post('/login',asyncHandler(accessController.login));
 
 //authentication
 
 //logout
-accessRouter.post('/shop/logout',authentication,asyncHandler(accessController.logout));
+accessRouter.post('/logout',authentication,asyncHandler(accessController.logout));
 
+//handleRefreshToken
+accessRouter.post('/handleRefreshToken',authenticationV2,asyncHandler(accessController.handleTokenV2));
 
 export default accessRouter

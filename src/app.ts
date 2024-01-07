@@ -55,7 +55,8 @@ app.use((req:Request,res:Response,next:NextFunction)=>{
      return res.status(status).json({
         status: "error",
         code: status,
-        message:error.message,
+        message:error.message||"Internal Server Error",
+        stack:error.stack,
      })
 
  })

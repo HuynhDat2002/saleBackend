@@ -1,8 +1,9 @@
-import { expressProps, AccessServiceSignUpProps } from "@/types";
+import { handleRefreshToken } from './../services/access.service';
+import { expressProps, AccessServiceSignUpProps,CustomRequest } from "@/types";
 import { accessService } from "@/services";
 import { Request, Response, NextFunction } from "express";
 import { successResponse } from "@/core";
-import {CustomRequest} from '@/types'
+
 
 export const signUp = async (
     req: Request,
@@ -43,4 +44,32 @@ export const logout = async (req: CustomRequest,
                 metadata: await accessService.logout(req.keyStore)
             }).send(res);
         }
+}
+
+export const handleToken = async (req: CustomRequest,
+    res: Response,
+    next: NextFunction) => {
+   
+            new successResponse.SuccessResponse({
+                message: "Update refreshToken successfully",
+                metadata: await accessService.handleRefreshToken(req.body.refreshToken)
+            }).send(res);
+        
+}
+
+export const handleTokenV2 = async (req: CustomRequest,
+    res: Response,
+    next: NextFunction) => {
+   if(req.refreshToken && req.keyStore && req.user){
+
+       new successResponse.SuccessResponse({
+           message: "Update refreshToken successfully",
+           metadata: await accessService.handleRefreshTokenV2({
+            refreshToken:req.refreshToken,
+            keyStore:req.keyStore,
+            user:req.user  
+        })
+       }).send(res);
+   }
+        
 }

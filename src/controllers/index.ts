@@ -1,3 +1,3 @@
 import * as accessController from './access.controller'
-
-export {accessController}
+import * as productController from './product.controller'
+export {accessController,productController}

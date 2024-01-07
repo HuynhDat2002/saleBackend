@@ -36,8 +36,8 @@ const shopSchema = new Schema({
     }
 },{
     timestamps:true,
-    conllection:COLLECTION_NAME
+    collection:COLLECTION_NAME
 });
 
 //Export the model
-export default model(COLLECTION_NAME, shopSchema);
+export default model(DOCUMENT_NAME, shopSchema);

@@ -31,8 +31,8 @@ const keyTokenSchema = new Schema({
     
 },{
     timestamps:true,
-    conllection:COLLECTION_NAME
+    collection:COLLECTION_NAME
 });
 
 //Export the model
-export default model(COLLECTION_NAME, keyTokenSchema);
+export default model(DOCUMENT_NAME, keyTokenSchema);

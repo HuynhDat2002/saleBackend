@@ -1,3 +1,4 @@
+import { findAllDraftsForShop } from './../models/repositories/product.repository';
 import { SuccessResponse } from './../core/success.response';
 
 import { Request, Response, NextFunction } from "express";
@@ -5,6 +6,7 @@ import * as jwt from "jsonwebtoken";
 import crypto from 'crypto'
 import { Types } from 'mongoose';
 
+//--------------------------models-------------------------------
 export interface ApiKeyModelProps{
     status: boolean;
     key: string;
@@ -18,9 +20,19 @@ privateKey:string;
 refreshTokensUsed:string[]|null;
 refreshToken:string
 }
+
+//------repositories----------
+export interface QueryProductProps{
+  query:Object,limit:number,skip:number
+}
+
+
+//--------------------------------configs--------------------------------
 export interface CustomRequest extends Request{
   objKey?:ApiKeyModelProps|null|undefined;
   keyStore?:KeyStoreModelProps|null|undefined;
+  user?:PayloadTokenPair;
+  refreshToken?:string;
 }
 export interface expressProps {
   req: Request;
@@ -43,7 +55,7 @@ export interface ConfigDb {
   [key: string]: ConfigEnvironment;
 }
 
-//---------------services--------------
+//----------------------------services--------------------------------
 
 export interface AccessServiceSignUpProps {
   name: string;
@@ -67,6 +79,54 @@ export interface ShopServiceFindByEmail{
   select?:any,
 }
 
+export interface CreateKeyTokenProps{
+  userId:string,
+  publicKey:string,
+  privateKey:string,
+  refreshToken:string,
+}
+
+export interface UpdateRefreshTokenProps{
+  oldRefreshToken:string,
+  newRefreshToken:string,
+}
+
+export interface ProductProps{
+  name:string,
+        thumb:string,
+        description:string,
+        price:number,
+        quantity:number,
+        type:string,
+        shop:string,
+        attributes:Object
+}
+
+export interface CreateProductProps{
+  type:string,
+  payload:ProductProps,
+}
+
+export interface HandleRefreshTokenV2Props{
+  refreshToken:string,
+  keyStore:KeyStoreModelProps,
+  user:PayloadTokenPair
+}
+
+export interface FindProductProps{
+  product_shop:string,limit?:number,skip?:number
+}
+
+export interface PublishProductByShopProps{
+  product_shop:string,
+  product_id:string
+}
+
+export interface UnPublishProductByShopProps{
+  product_shop:string,
+  product_id:string
+}
+
 //-----------------Utils-----------------
 export interface PayloadTokenPair extends jwt.JwtPayload {
   userId?:string;
@@ -85,11 +145,15 @@ export interface TokenPairProps{
   refreshToken:string
 }
 
+export interface  VerifyJwtProps{
+  token:string,
+  keySecret:string,
+}
 
 //----------------core--------------------
 export interface SuccessResponseProps{
   message?:string,
-  metadata:Object,
+  metadata?:Object|null,
   statusCode?:number,
   responseStatusCode?:string
 }
