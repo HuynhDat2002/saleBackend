@@ -86,3 +86,20 @@ export const searchProduct = async (req: CustomRequest, res: Response,next: Next
         metadata: await productService.searchProduct(keySearch)
     }).send(res);
 }       
+
+
+export const findAllProduct=async (req: CustomRequest, res: Response,next: NextFunction)=>{
+    new successResponse.SuccessResponse({
+        message:"Search all product successfully",
+        metadata: await productService.findAllProduct(req.query)
+    }).send(res);
+}
+
+export const findProduct= async (req: CustomRequest, res: Response,next: NextFunction)=>{
+    const {id}  =req.params;
+
+    new successResponse.SuccessResponse({
+        message:"Search a product successfully",
+        metadata: await productService.findProduct(id)
+    }).send(res);
+}

@@ -26,6 +26,18 @@ export interface QueryProductProps{
   query:Object,limit:number,skip:number
 }
 
+export interface FindAllProductProps{
+  limit:number,
+  page:number,
+  sort:string,
+  filter:Object,
+  select:any
+}
+
+export interface FindAProductProps{
+  id:string,
+  unSelect:any
+}
 
 //--------------------------------configs--------------------------------
 export interface CustomRequest extends Request{
@@ -127,7 +139,7 @@ export interface UnPublishProductByShopProps{
   product_id:string
 }
 
-//-----------------Utils-----------------
+//--------------------------------Utils-------------------------------
 export interface PayloadTokenPair extends jwt.JwtPayload {
   userId?:string;
   email?:string;
@@ -150,7 +162,7 @@ export interface  VerifyJwtProps{
   keySecret:string,
 }
 
-//----------------core--------------------
+//---------------------------core---------------------------------
 export interface SuccessResponseProps{
   message?:string,
   metadata?:Object|null,

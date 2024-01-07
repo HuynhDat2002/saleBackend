@@ -10,6 +10,10 @@ const productRouter = express.Router();
 
 //use for user not register
 productRouter.get('/search/:keySearch',asyncHandler(productController.searchProduct))
+productRouter.get('/published/all',asyncHandler(productController.findAllPublishedForShop))
+productRouter.get('/',asyncHandler(productController.findAllProduct))
+productRouter.get('/:id',asyncHandler(productController.findProduct))
+
 
 
 //use for shop
@@ -22,7 +26,6 @@ productRouter.post('/unpublish/:id',asyncHandler(productController.unPublishProd
 
 
 productRouter.get('/drafts/all',asyncHandler(productController.findAllDraftsForShop))
-productRouter.get('/published/all',asyncHandler(productController.findAllPublishedForShop))
 
 
 export default productRouter;

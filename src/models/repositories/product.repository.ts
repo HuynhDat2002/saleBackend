@@ -4,10 +4,10 @@
 
 import { productModel,electronicModel,clothingModel,furnitureModel } from "@/models/product.model"
 
-import {QueryProductProps,PublishProductByShopProps} from '@/types'
+import {QueryProductProps,PublishProductByShopProps,FindAllProductProps,FindAProductProps} from '@/types'
+import { getSelectData,getUnSelectData} from '@/utils'
 
-
-export const queryProduct= async ({query,limit,skip}:QueryProductProps)=>{
+const queryProduct= async ({query,limit,skip}:QueryProductProps)=>{
     return await productModel.find(query)
     .populate('product_shop','name email -_id')
     .sort({updateAt:-1})
@@ -17,17 +17,17 @@ export const queryProduct= async ({query,limit,skip}:QueryProductProps)=>{
 
 
 }
-export const findAllPublishForShop= async ({query,limit,skip}:QueryProductProps)=>{
+const findAllPublishForShop= async ({query,limit,skip}:QueryProductProps)=>{
     return await queryProduct({query,limit,skip})
 
 }
 
-export const findAllDraftsForShop= async ({query,limit,skip}:QueryProductProps)=>{
+const findAllDraftsForShop= async ({query,limit,skip}:QueryProductProps)=>{
 return await queryProduct({query,limit,skip})
 
 }
 
-export const publishProductByShop = async ({product_shop,product_id}:PublishProductByShopProps) => {
+const publishProductByShop = async ({product_shop,product_id}:PublishProductByShopProps) => {
     const foundShop=await productModel.findOneAndUpdate({
         product_shop: product_shop,
         _id:product_id
@@ -42,7 +42,7 @@ export const publishProductByShop = async ({product_shop,product_id}:PublishProd
 }   
 
 
-export const unPublishProductByShop = async ({product_shop,product_id}:PublishProductByShopProps) => {
+const unPublishProductByShop = async ({product_shop,product_id}:PublishProductByShopProps) => {
     const foundShop=await productModel.findOneAndUpdate({
         product_shop: product_shop,
         _id:product_id
@@ -56,7 +56,7 @@ export const unPublishProductByShop = async ({product_shop,product_id}:PublishPr
     return foundShop;
 }   
 
-export const searchProduct = async (keySearch:string)=>{
+const searchProduct = async (keySearch:string)=>{
     const regexSearch = new RegExp(keySearch,'i');
     const result = await productModel.find({
         $text:{$search:regexSearch.source},
@@ -68,4 +68,35 @@ export const searchProduct = async (keySearch:string)=>{
     .sort( {$score:{$meta:'textScore'}})
     .lean();
     return result;
+}
+
+const findAllProduct = async ({limit,sort,page,filter,select}:FindAllProductProps)=>{
+    const skip = (page-1)*limit;
+    const allProduct = await productModel
+    .find(filter)
+    .sort(sort ==='ctime' ? {_id:-1} :{_id:1})
+    .skip(skip)
+    .limit(limit)
+    .select(getSelectData(select))
+    .lean()
+    return allProduct;
+}
+
+const findProduct = async ({id,unSelect}:FindAProductProps)=>{
+    const allProduct = await productModel.find({_id:id}).select(getUnSelectData(unSelect))
+    return allProduct;
+}
+const updateProduct = async ({id,unSelect}:FindAProductProps)=>{
+    const allProduct = await productModel.find({_id:id}).select(getUnSelectData(unSelect))
+    return allProduct;
+}
+
+export {
+    findAllDraftsForShop,
+    findAllPublishForShop,
+    unPublishProductByShop,
+    publishProductByShop,
+    searchProduct,
+    findAllProduct,
+    findProduct,
 }

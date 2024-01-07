@@ -1,4 +1,6 @@
 
+
+
 'use strict'
 
 import { productModel, clothingModel, electronicModel,furnitureModel } from '@/models/product.model'
@@ -7,6 +9,7 @@ import {errorResponse} from '@/core'
 import * as productRepository from '@/models/repositories/product.repository'
 import { ProductProps,CreateProductProps,FindProductProps,PublishProductByShopProps,
     UnPublishProductByShopProps } from '@/types'
+
 
 class Product {
     product_name
@@ -148,3 +151,23 @@ export const findAllPublishForShop=async ({product_shop,limit=10,skip=0}:FindPro
 export const searchProduct = async (keySearch:string) =>{
     return await productRepository.searchProduct(keySearch);
 }
+export const findAllProduct = async ({limit=50,sort='ctime',page=1,filter={isPublished:true}}) =>{
+    const allProduct = await productRepository.findAllProduct({
+        limit:limit,
+        page:page,
+        sort:sort,
+        filter:filter,
+        select:['product_name','product_thumb','product_price','product_ratingsAverage']
+
+    })
+    return allProduct;
+
+}
+export const findProduct = async (id:string) =>{
+    return await productRepository.findProduct({id:id,unSelect:['__v']});
+}
+export const updateProduct = async (productId:string) =>{
+    return await productRepository.updateProduct(keySearch);
+}
+
+
