@@ -39,6 +39,10 @@ export interface FindAProductProps{
   unSelect:any
 }
 
+export interface UpdateProductProps{
+  productId:string,
+  payload:any,
+}
 //--------------------------------configs--------------------------------
 export interface CustomRequest extends Request{
   objKey?:ApiKeyModelProps|null|undefined;

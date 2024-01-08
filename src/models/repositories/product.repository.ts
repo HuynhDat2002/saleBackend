@@ -4,7 +4,7 @@
 
 import { productModel,electronicModel,clothingModel,furnitureModel } from "@/models/product.model"
 
-import {QueryProductProps,PublishProductByShopProps,FindAllProductProps,FindAProductProps} from '@/types'
+import {QueryProductProps,PublishProductByShopProps,FindAllProductProps,FindAProductProps,UpdateProductProps} from '@/types'
 import { getSelectData,getUnSelectData} from '@/utils'
 
 const queryProduct= async ({query,limit,skip}:QueryProductProps)=>{
@@ -86,9 +86,9 @@ const findProduct = async ({id,unSelect}:FindAProductProps)=>{
     const allProduct = await productModel.find({_id:id}).select(getUnSelectData(unSelect))
     return allProduct;
 }
-const updateProduct = async ({id,unSelect}:FindAProductProps)=>{
-    const allProduct = await productModel.find({_id:id}).select(getUnSelectData(unSelect))
-    return allProduct;
+const updateProduct = async ({productId,payload}:UpdateProductProps)=>{
+    const updatedProduct = await productModel.findOneAndUpdate({_id:productId},payload,{new:true});
+    return updatedProduct;
 }
 
 export {
@@ -99,4 +99,5 @@ export {
     searchProduct,
     findAllProduct,
     findProduct,
+    updateProduct,
 }

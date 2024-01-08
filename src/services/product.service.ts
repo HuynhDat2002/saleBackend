@@ -1,6 +1,5 @@
 
 
-
 'use strict'
 
 import { productModel, clothingModel, electronicModel,furnitureModel } from '@/models/product.model'
@@ -8,7 +7,7 @@ import { Request, Response, NextFunction } from 'express'
 import {errorResponse} from '@/core'
 import * as productRepository from '@/models/repositories/product.repository'
 import { ProductProps,CreateProductProps,FindProductProps,PublishProductByShopProps,
-    UnPublishProductByShopProps } from '@/types'
+    UnPublishProductByShopProps,UpdateProductProps } from '@/types'
 
 
 class Product {
@@ -44,6 +43,10 @@ class Product {
     async createProduct(id:string){
         return await productModel.create({...this,_id:id});
     }
+    async updateProduct({productId,payload}:UpdateProductProps){
+        const up= await productRepository.updateProduct({productId,payload});
+        return up
+    }
 }
 
 
@@ -58,6 +61,14 @@ class Clothing extends Product{
         const newProduct = await super.createProduct(newClothing._id.toString())
         if(!newProduct) throw new errorResponse.BadRequestError("Create new product error")
         return newProduct;
+    }
+    async updateProduct(productId:string){
+        const objectParams = this;
+        if(objectParams.product_attributes){
+
+        }
+        const updateProduct =  await super.updateProduct({productId,payload:objectParams});
+        return updateProduct;
     }
 }
 
@@ -166,8 +177,8 @@ export const findAllProduct = async ({limit=50,sort='ctime',page=1,filter={isPub
 export const findProduct = async (id:string) =>{
     return await productRepository.findProduct({id:id,unSelect:['__v']});
 }
-export const updateProduct = async (productId:string) =>{
-    return await productRepository.updateProduct();
+export const updateProduct = async ({productId,payload}:UpdateProductProps) =>{
+    return await productRepository.updateProduct({productId,payload});
 }
 
 
