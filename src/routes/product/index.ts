@@ -22,7 +22,7 @@ productRouter.use(authentication);
 productRouter.post('/create-product',asyncHandler(productController.createProduct))
 productRouter.post('/publish/:id',asyncHandler(productController.publishProductByShop))
 productRouter.post('/unpublish/:id',asyncHandler(productController.unPublishProductByShop))
-
+productRouter.patch('/update/:id',asyncHandler(productController.updateProduct))
 
 
 productRouter.get('/drafts/all',asyncHandler(productController.findAllDraftsForShop))

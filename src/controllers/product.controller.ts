@@ -5,13 +5,13 @@ import {productService} from '@/services'
 import { CustomRequest ,ProductProps} from '@/types';
 
 export const createProduct = async (req: CustomRequest, res: Response,next: NextFunction) => {
-    const type:string=req.body.type;
+    const type:string=req.body.product_type;
     let payload:ProductProps
     if(!req.user){
          payload=req.body
     }
     else{
-         payload={...req.body,shop:req.user.userId}
+         payload={...req.body,product_shop:req.user.userId}
     }
     console.log('payloadproduct: ',payload)
     new successResponse.CREATED({
@@ -101,5 +101,22 @@ export const findProduct= async (req: CustomRequest, res: Response,next: NextFun
     new successResponse.SuccessResponse({
         message:"Search a product successfully",
         metadata: await productService.findProduct(id)
+    }).send(res);
+}
+
+
+export const updateProduct= async (req: CustomRequest, res: Response,next: NextFunction)=>{
+    const {id}  =req.params;
+    let product_shop:string=""
+    if(req.user){
+         product_shop =req.user.userId as string
+    }
+    new successResponse.SuccessResponse({
+        message:"Search a product successfully",
+        metadata: await productService.updateProduct({
+            type:req.body.product_type,
+            payload:{...req.body,product_shop:product_shop},
+            productId:id
+        })
     }).send(res);
 }

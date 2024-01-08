@@ -39,7 +39,7 @@ export interface FindAProductProps{
   unSelect:any
 }
 
-export interface UpdateProductProps{
+export interface UpdateProductRepositoryProps{
   productId:string,
   payload:any,
   model:any,
@@ -109,19 +109,20 @@ export interface UpdateRefreshTokenProps{
 }
 
 export interface ProductProps{
-  name:string,
-        thumb:string,
-        description:string,
-        price:number,
-        quantity:number,
-        type:string,
-        shop:string,
-        attributes:Object
+  product_name:string,
+  product_thumb:string,
+  product_description:string,
+  product_price:number,
+  product_quantity:number,
+  product_type:string,
+  product_shop:string,
+  product_attributes:Object
 }
 
-export interface CreateProductProps{
+export interface CreateUpdateProductProps{
   type:string,
   payload:ProductProps,
+  productId?:string,
 }
 
 export interface HandleRefreshTokenV2Props{

@@ -6,8 +6,8 @@ import { productModel, clothingModel, electronicModel,furnitureModel } from '@/m
 import { Request, Response, NextFunction } from 'express'
 import {errorResponse} from '@/core'
 import * as productRepository from '@/models/repositories/product.repository'
-import { ProductProps,CreateProductProps,FindProductProps,PublishProductByShopProps,
-    UnPublishProductByShopProps,UpdateProductProps } from '@/types'
+import { ProductProps,CreateUpdateProductProps,FindProductProps,PublishProductByShopProps,
+    UnPublishProductByShopProps,UpdateProductRepositoryProps } from '@/types'
 
 
 class Product {
@@ -21,24 +21,24 @@ class Product {
     product_attributes
 
     constructor({
-        name,
-       thumb,
-        description,
-        price,
-        quantity,
-        type,
-       shop,
-        attributes
+        product_name,
+        product_thumb,
+        product_description,
+        product_price,
+        product_quantity,
+        product_type,
+        product_shop,
+        product_attributes
     }:ProductProps){
        
-        this.product_name = name
-        this.product_thumb = thumb
-        this.product_description = description
-        this.product_price = price
-        this.product_quantity = quantity
-        this.product_type = type
-        this.product_shop=shop
-        this.product_attributes = attributes
+        this.product_name = product_name
+        this.product_thumb = product_thumb
+        this.product_description = product_description
+        this.product_price = product_price
+        this.product_quantity = product_quantity
+        this.product_type = product_type
+        this.product_shop=product_shop
+        this.product_attributes = product_attributes
     }
     async createProduct(id:string){
         return await productModel.create({...this,_id:id});
@@ -113,7 +113,7 @@ registerProductType('Electronic',Electronic)
 registerProductType('Furniture',Furniture)
 
 
-export const createProduct = async ({type,payload}:CreateProductProps) => {
+export const createProduct = async ({type,payload}:CreateUpdateProductProps) => {
     const productClass=productRegistry[type];
     if(!productClass) throw new errorResponse.BadRequestError(`Invalid Product Types ${type}`)
 
@@ -177,8 +177,12 @@ export const findAllProduct = async ({limit=50,sort='ctime',page=1,filter={isPub
 export const findProduct = async (id:string) =>{
     return await productRepository.findProduct({id:id,unSelect:['__v']});
 }
-export const updateProduct = async ({productId,payload}:UpdateProductProps) =>{
-    return await productRepository.updateProduct({productId,payload});
+export const updateProduct = async ({type,payload,productId}:CreateUpdateProductProps) =>{
+    const productClass=productRegistry[type];
+    if(!productClass) throw new errorResponse.BadRequestError(`Invalid Product Types ${type}`)
+
+    const update= await new productClass(payload).updateProduct(productId);
+    return update;
 }
 
 
