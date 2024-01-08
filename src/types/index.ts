@@ -42,6 +42,7 @@ export interface FindAProductProps{
 export interface UpdateProductProps{
   productId:string,
   payload:any,
+  model:any,
 }
 //--------------------------------configs--------------------------------
 export interface CustomRequest extends Request{

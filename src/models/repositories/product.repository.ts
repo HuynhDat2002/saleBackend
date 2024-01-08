@@ -6,6 +6,7 @@ import { productModel,electronicModel,clothingModel,furnitureModel } from "@/mod
 
 import {QueryProductProps,PublishProductByShopProps,FindAllProductProps,FindAProductProps,UpdateProductProps} from '@/types'
 import { getSelectData,getUnSelectData} from '@/utils'
+import { modelNames } from "mongoose"
 
 const queryProduct= async ({query,limit,skip}:QueryProductProps)=>{
     return await productModel.find(query)
@@ -86,10 +87,12 @@ const findProduct = async ({id,unSelect}:FindAProductProps)=>{
     const allProduct = await productModel.find({_id:id}).select(getUnSelectData(unSelect))
     return allProduct;
 }
-const updateProduct = async ({productId,payload}:UpdateProductProps)=>{
-    const updatedProduct = await productModel.findOneAndUpdate({_id:productId},payload,{new:true});
+const updateProduct = async ({productId,payload,model}:UpdateProductProps)=>{
+    const updatedProduct = await model.findOneAndUpdate({_id:productId},payload,{new:true});
     return updatedProduct;
 }
+
+
 
 export {
     findAllDraftsForShop,
@@ -100,4 +103,5 @@ export {
     findAllProduct,
     findProduct,
     updateProduct,
+  
 }

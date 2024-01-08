@@ -43,9 +43,9 @@ class Product {
     async createProduct(id:string){
         return await productModel.create({...this,_id:id});
     }
-    async updateProduct({productId,payload}:UpdateProductProps){
-        const up= await productRepository.updateProduct({productId,payload});
-        return up
+    async updateProduct(productId:string,payload:any){
+        return await productRepository.updateProduct({productId,payload:payload,model:productModel});
+    
     }
 }
 
@@ -65,11 +65,11 @@ class Clothing extends Product{
     async updateProduct(productId:string){
         const objectParams = this;
         if(objectParams.product_attributes){
-
+            await productRepository.updateProduct({productId,payload:objectParams,model:clothingModel})
         }
-        const updateProduct =  await super.updateProduct({productId,payload:objectParams});
+        const updateProduct =  await super.updateProduct(productId,objectParams);
         return updateProduct;
-    }
+    }   
 }
 
 class Electronic extends Product{
