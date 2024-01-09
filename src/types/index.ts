@@ -44,6 +44,15 @@ export interface UpdateProductRepositoryProps{
   payload:any,
   model:any,
 }
+
+export interface InsertInventoryRepositoryProps{
+  productId:string,
+  shopId:string,
+  stock:number,
+  location?:string,
+}
+
+
 //--------------------------------configs--------------------------------
 export interface CustomRequest extends Request{
   objKey?:ApiKeyModelProps|null|undefined;

@@ -6,6 +6,8 @@ import { productModel, clothingModel, electronicModel,furnitureModel } from '@/m
 import { Request, Response, NextFunction } from 'express'
 import {errorResponse} from '@/core'
 import * as productRepository from '@/models/repositories/product.repository'
+import * as inventoryRepository from '@/models/repositories/inventory.repository'
+
 import { ProductProps,CreateUpdateProductProps,FindProductProps,PublishProductByShopProps,
     UnPublishProductByShopProps,UpdateProductRepositoryProps } from '@/types'
 import {removeUndefinedObject,updateNestedObjectParser} from '@/utils'
@@ -122,6 +124,15 @@ export const createProduct = async ({type,payload}:CreateUpdateProductProps) => 
     if(!productClass) throw new errorResponse.BadRequestError(`Invalid Product Types ${type}`)
 
     const newProduct = await new productClass(payload).createProduct();
+    if(newProduct){
+        
+        // add new product into product_stock
+        await inventoryRepository.insertInventory({
+            productId:newProduct._id,
+            shopId:newProduct.product_shop,
+            stock:newProduct.product_quantity
+        })
+    }
     return newProduct;
     // if(type==="Clothing"){
     //     const newClothing = await new Clothing(payload).createProduct()
@@ -166,6 +177,7 @@ export const findAllPublishForShop=async ({product_shop,limit=10,skip=0}:FindPro
 export const searchProduct = async (keySearch:string) =>{
     return await productRepository.searchProduct(keySearch);
 }
+
 export const findAllProduct = async ({limit=50,sort='ctime',page=1,filter={isPublished:true}}) =>{
     const allProduct = await productRepository.findAllProduct({
         limit:limit,
