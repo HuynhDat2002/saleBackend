@@ -8,7 +8,7 @@ import {errorResponse} from '@/core'
 import * as productRepository from '@/models/repositories/product.repository'
 import { ProductProps,CreateUpdateProductProps,FindProductProps,PublishProductByShopProps,
     UnPublishProductByShopProps,UpdateProductRepositoryProps } from '@/types'
-
+import {removeUndefinedObject,updateNestedObjectParser} from '@/utils'
 
 class Product {
     product_name
@@ -63,9 +63,13 @@ class Clothing extends Product{
         return newProduct;
     }
     async updateProduct(productId:string){
-        const objectParams = this;
+        const objectParams = updateNestedObjectParser(this);
+        console.log('removeundefined',objectParams);
         if(objectParams.product_attributes){
-            await productRepository.updateProduct({productId,payload:objectParams,model:clothingModel})
+            await productRepository.updateProduct({
+                productId,
+                payload:objectParams.product_attributes,
+                model:clothingModel})
         }
         const updateProduct =  await super.updateProduct(productId,objectParams);
         return updateProduct;
