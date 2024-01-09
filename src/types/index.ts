@@ -154,6 +154,14 @@ export interface UnPublishProductByShopProps{
   product_id:string
 }
 
+export interface CreateDiscountCodeProps{
+  code:string,start_date:Date,end_date:Date,is_active:boolean,
+  shopId:string,min_order_value:number, products_id:string,
+  applies_to:string,
+  name:string,description:string,type:string,value:number,
+  max_value:number,max_use:number,max_per_user_use:number
+}
+
 //--------------------------------Utils-------------------------------
 export interface PayloadTokenPair extends jwt.JwtPayload {
   userId?:string;
