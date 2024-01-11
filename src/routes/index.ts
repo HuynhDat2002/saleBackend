@@ -5,6 +5,7 @@ const router=express.Router();
 
 import accessRouter from './access';
 import productRouter from './product';
+import discountRouter from './discount';
 import { apiKey,permissions } from '@/auth';
 
 
@@ -17,5 +18,8 @@ router.use('/v1/api/product',productRouter)
 
 router.use('/v1/api/shop',accessRouter)
 
+router.use('/v1/api/shop',accessRouter)
+
+router.use('v1/api/discount',discountRouter)
 
 export default router;

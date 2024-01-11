@@ -4,7 +4,7 @@ import { SuccessResponse } from './../core/success.response';
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import crypto from 'crypto'
-import { Types } from 'mongoose';
+import { NumberSchemaDefinition, Types } from 'mongoose';
 
 //--------------------------models-------------------------------
 export interface ApiKeyModelProps{
@@ -26,12 +26,14 @@ export interface QueryProductProps{
   query:Object,limit:number,skip:number
 }
 
-export interface FindAllProductProps{
+export interface FindAllProps{
   limit:number,
   page:number,
-  sort:string,
+  sort?:string,
   filter:Object,
-  select:any
+  select?:any,
+  unSelect?:any,
+  model?:any
 }
 
 export interface FindAProductProps{
@@ -157,10 +159,21 @@ export interface UnPublishProductByShopProps{
 export interface CreateDiscountCodeProps{
   code:string,start_date:Date,end_date:Date,is_active:boolean,
   shopId:string,min_order_value:number, products_id:string,
-  applies_to:string,
+  applies_to:string,use_count:number,user_used:Array<any>,
   name:string,description:string,type:string,value:number,
   max_value:number,max_use:number,max_per_user_use:number
 }
+
+export interface GetAllProductByDiscountProps{
+  code:string,shopId:string,userId:string,limit:number,page:number
+}
+
+ 
+  export interface GetAllDiscountByShopProps{
+    limit:number,
+    page:number,
+    shopId:string,
+  }
 
 //--------------------------------Utils-------------------------------
 export interface PayloadTokenPair extends jwt.JwtPayload {

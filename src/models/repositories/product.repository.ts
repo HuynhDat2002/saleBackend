@@ -4,7 +4,7 @@
 
 import { productModel,electronicModel,clothingModel,furnitureModel } from "@/models/product.model"
 
-import {QueryProductProps,PublishProductByShopProps,FindAllProductProps,FindAProductProps,UpdateProductRepositoryProps} from '@/types'
+import {QueryProductProps,PublishProductByShopProps,FindAllProps,FindAProductProps,UpdateProductRepositoryProps} from '@/types'
 import { getSelectData,getUnSelectData} from '@/utils'
 import { modelNames } from "mongoose"
 
@@ -71,7 +71,7 @@ const searchProduct = async (keySearch:string)=>{
     return result;
 }
 
-const findAllProduct = async ({limit,sort,page,filter,select}:FindAllProductProps)=>{
+const findAllProduct = async ({limit,sort,page,filter,select}:FindAllProps)=>{
     const skip = (page-1)*limit;
     const allProduct = await productModel
     .find(filter)
@@ -91,7 +91,7 @@ const updateProduct = async ({productId,payload,model}:UpdateProductRepositoryPr
     const updatedProduct = await model.findOneAndUpdate({_id:productId},payload,{new:true});
     return updatedProduct;
 }
-
+ 
 
 
 export {
