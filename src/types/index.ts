@@ -175,6 +175,15 @@ export interface GetAllProductByDiscountProps{
     shopId:string,
   }
 
+  export interface GetDiscountAmountProps{
+    code:string,userId:string,shopId:string,products:any
+  }
+
+  export interface DeleteDiscountCodeProps{
+    code:string,
+    shopId:string,
+    userId?:string
+  }
 //--------------------------------Utils-------------------------------
 export interface PayloadTokenPair extends jwt.JwtPayload {
   userId?:string;
