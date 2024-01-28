@@ -7,7 +7,6 @@ import { convertToObjectId } from '@/utils'
 import * as productRepository from '@/models/repositories/product.repository'
 
 import * as discountRepository from '@/models/repositories/discount.repository'
-import { error } from 'console'
 
 /*
     1. generator discount code [shop/admin]
@@ -20,19 +19,20 @@ import { error } from 'console'
 
 */
 
-const createDiscountCode = (body:CreateDiscountCodeProps)=>{
+const createDiscountCode =async (body:CreateDiscountCodeProps)=>{
     const {
         code,start_date,end_date,is_active,shopId,min_order_value, products_id,applies_to,
         name,description,use_count,user_used,
         type,value,max_value,max_use,max_per_user_use
     }= body
 
-    if(new Date()>new Date(start_date)||new Date()||new Date()>new Date(end_date)){
+    if(new Date()>new Date(end_date)){
         throw new errorResponse.BadRequestError("Start or end time discount is wrong")
     }
 
-    const foundDiscount:any = discountRepository.findOne({discount_name:name,discount_shopId:shopId})
-    if(foundDiscount && foundDiscount.discount_is_active){
+    const foundDiscount:any =await discountRepository.findOne({discount_name:name,discount_shopId:convertToObjectId(shopId)})
+    console.log('found',foundDiscount);
+    if(foundDiscount && foundDiscount.discount_is_active===true){
         throw new errorResponse.BadRequestError("Discount exists!")
     }
 
@@ -49,9 +49,11 @@ const updateDiscount =async ()=>{
 }
 
 const getAllProductByDiscount=async ({
-    code,shopId,userId,limit,page
+    code,shopId,limit=10,page=1
 }:GetAllProductByDiscountProps)=>{
-    const foundDiscount:any = discountRepository.findOne({discount_code:code,discount_shopId:shopId})
+    console.log('code',code)
+    console.log('shopId',shopId)
+    const foundDiscount:any =await discountRepository.findOne({discount_code:code,discount_shopId:shopId})
     if(!foundDiscount || !foundDiscount.discount_is_active){
         throw new errorResponse.BadRequestError("Discount not exists!")
     }
@@ -92,7 +94,7 @@ const getAllProductByDiscount=async ({
 }
 
 
-const getAllDiscountByShop = async ({limit,page,shopId}:GetAllDiscountByShopProps)=>{
+const getAllDiscountByShop = async ({limit=10,page=1,shopId}:GetAllDiscountByShopProps)=>{
     const discounts = await discountRepository.findAllDiscountCodeUnSelect({
         limit:+limit,
         page:+page,
@@ -100,18 +102,25 @@ const getAllDiscountByShop = async ({limit,page,shopId}:GetAllDiscountByShopProp
             discount_shopId:shopId,
             discount_is_active:true
         },
-        unSelect:['__v'],
+        select:['discount_code','discount_name','discount_value','discount_type','discount_start_date','discount_end_date'],
         model:discountModel,
     })
     return discounts
 }
 
-const getDiscountAmount =async ({code,userId,shopId,products}:GetDiscountAmountProps)=>{
-    const foundDiscount:any = await discountRepository.findOne({discount_code:code,discount_shopId:convertToObjectId(shopId)})
-   if(!foundDiscount) throw new errorResponse.NotFound("Discount not exists")
-   const {discount_is_active,discount_max_use,discount_start_date,
-discount_end_date,discount_min_order_value,
- discount_max_per_user_use,discount_user_used,discount_type,discount_value} = foundDiscount;
+const getDiscountAmount =async ({code,userId,shopId,adminId,products}:GetDiscountAmountProps)=>{
+    let foundDiscount:any
+    if(shopId){
+        foundDiscount = await discountRepository.findOne({discount_code:code,discount_shopId:convertToObjectId(shopId)})
+        if(!foundDiscount) throw new errorResponse.NotFound("Discount not exists")
+    }
+    else if(adminId){
+        foundDiscount = await discountRepository.findOne({discount_code:code,discount_adminId:adminId})
+        if(!foundDiscount) throw new errorResponse.NotFound("Discount not exists")
+    }
+    const {discount_is_active,discount_max_use,discount_start_date,
+    discount_end_date,discount_min_order_value,
+    discount_max_per_user_use,discount_user_used,discount_type,discount_value} = foundDiscount;
     if(!discount_is_active){
         throw new errorResponse.NotFound("Discount expired!")
     }
@@ -122,7 +131,7 @@ discount_end_date,discount_min_order_value,
     if(new Date() > new Date(discount_end_date)) throw new errorResponse.NotFound("Discount expired!")
     
 
-    //check xem có sét gía trị tối thiểu hay không
+    //check xem có xét gía trị tối thiểu hay không
     let totalOrder=0
     if(discount_min_order_value>0) {
         totalOrder=products.reduce((acc:number,product:any)=>{
@@ -156,7 +165,7 @@ const deleteDiscountCode = async ({code,shopId}:DeleteDiscountCodeProps)=>{
     return deleted
 }
 
-const cancelDiscountCode=async ({code,shopId,userId}:DeleteDiscountCodeProps)=>{
+const cancelDiscountCode=async ({code,shopId}:DeleteDiscountCodeProps)=>{
     const foundDiscount:any = discountRepository.findOne({discount_code:code,discount_shopId:shopId})
     if(!foundDiscount || !foundDiscount.discount_is_active){
         throw new errorResponse.BadRequestError("Discount not exists!")

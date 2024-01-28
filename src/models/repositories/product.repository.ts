@@ -5,9 +5,8 @@
 import { productModel,electronicModel,clothingModel,furnitureModel } from "@/models/product.model"
 
 import {QueryProductProps,PublishProductByShopProps,FindAllProps,FindAProductProps,UpdateProductRepositoryProps} from '@/types'
-import { getSelectData,getUnSelectData} from '@/utils'
-import { modelNames } from "mongoose"
-
+import { convertToObjectId, getSelectData,getUnSelectData} from '@/utils'
+import {errorResponse} from '@/core'
 const queryProduct= async ({query,limit,skip}:QueryProductProps)=>{
     return await productModel.find(query)
     .populate('product_shop','name email -_id')
@@ -38,7 +37,7 @@ const publishProductByShop = async ({product_shop,product_id}:PublishProductBySh
     },{
         new:true
     })
-    if(!foundShop) return null;
+    if(!foundShop) throw new errorResponse.NotFound("Not found product in shop");
     return foundShop;
 }   
 
@@ -83,8 +82,8 @@ const findAllProduct = async ({limit,sort,page,filter,select}:FindAllProps)=>{
     return allProduct;
 }
 
-const findProduct = async ({id,unSelect}:FindAProductProps)=>{
-    const allProduct = await productModel.find({_id:id}).select(getUnSelectData(unSelect))
+const findProduct = async ({id,unSelect}:any)=>{
+    const allProduct = await productModel.findOne({_id:convertToObjectId(id)}).select(getUnSelectData(unSelect))
     return allProduct;
 }
 const updateProduct = async ({productId,payload,model}:UpdateProductRepositoryProps)=>{
@@ -92,7 +91,19 @@ const updateProduct = async ({productId,payload,model}:UpdateProductRepositoryPr
     return updatedProduct;
 }
  
-
+const checkProductByServer = async (products:any)=>{
+    return await Promise.all(products.map( async (product:any) =>{
+        const foundProduct:any =await productModel.findOne({_id:convertToObjectId(product.productId)}).select(getSelectData(['product_price'])).lean()
+        console.log('product',foundProduct)
+        if(foundProduct){
+            return {
+                price:foundProduct.product_price,
+                quantity:product.quantity,
+                productId:product.productId
+            }
+        }
+    }))
+}
 
 export {
     findAllDraftsForShop,
@@ -103,5 +114,5 @@ export {
     findAllProduct,
     findProduct,
     updateProduct,
-  
+    checkProductByServer
 }

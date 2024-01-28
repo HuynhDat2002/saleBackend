@@ -66,7 +66,7 @@ class Clothing extends Product{
     }
     async updateProduct(productId:string){
         const objectParams = updateNestedObjectParser(this);
-        console.log('removeundefined',objectParams);
+        
         if(objectParams.product_attributes){
             await productRepository.updateProduct({
                 productId,
@@ -87,6 +87,18 @@ class Electronic extends Product{
         if(!newProduct) throw new errorResponse.BadRequestError("Create new product error")
         return newProduct;
     }
+    async updateProduct(productId:string){
+        const objectParams = updateNestedObjectParser(this);
+        
+        if(objectParams.product_attributes){
+            await productRepository.updateProduct({
+                productId,
+                payload:objectParams.product_attributes,
+                model:electronicModel})
+        }
+        const updateProduct =  await super.updateProduct(productId,objectParams);
+        return updateProduct;
+    }   
 }
 
 
@@ -103,6 +115,18 @@ class Furniture extends Product{
         if(!newProduct) throw new errorResponse.BadRequestError("Create new product error")
         return newProduct;
     }
+    async updateProduct(productId:string){
+        const objectParams = updateNestedObjectParser(this);
+        
+        if(objectParams.product_attributes){
+            await productRepository.updateProduct({
+                productId,
+                payload:objectParams.product_attributes,
+                model:furnitureModel})
+        }
+        const updateProduct =  await super.updateProduct(productId,objectParams);
+        return updateProduct;
+    }   
 }
 
 
@@ -152,18 +176,18 @@ export const createProduct = async ({type,payload}:CreateUpdateProductProps) => 
 
 export const findAllDraftsForShop=async ({product_shop,limit=10,skip=0}:FindProductProps)=>{
     const query = {product_shop,isDraft:true}
-    const findAll = await productRepository.findAllDraftsForShop({query,limit,skip})
+    const findAll:any = await productRepository.findAllDraftsForShop({query,limit,skip})
     return findAll;
 }
 
 export const publishProductByShop = async ({product_shop,product_id}:PublishProductByShopProps)=>{
-    const shop =await productRepository.publishProductByShop({product_shop,product_id})
+    const shop:any =await productRepository.publishProductByShop({product_shop,product_id})
     return shop;
 
 }
 
 export const unPublishProductByShop = async ({product_shop,product_id}:UnPublishProductByShopProps)=>{
-    const shop =await productRepository.unPublishProductByShop({product_shop,product_id})
+    const shop:any =await productRepository.unPublishProductByShop({product_shop,product_id})
     return shop;
 
 }
@@ -184,7 +208,7 @@ export const findAllProduct = async ({limit=50,sort='ctime',page=1,filter={isPub
         page:page,
         sort:sort,
         filter:filter,
-        select:['product_name','product_thumb','product_price','product_ratingsAverage']
+        select:['product_name','product_thumb','product_price','product_ratingsAverage','product_shop']
 
     })
     return allProduct;

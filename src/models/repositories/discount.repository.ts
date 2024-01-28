@@ -21,7 +21,7 @@ const createDiscount=async (body:CreateDiscountCodeProps)=>{
         discount_name: body.name,
        discount_descriptions:body.description,
         discount_type: body.type,
-        discount_value: body.type,
+        discount_value: body.value,
         discount_code: body.code,
         discount_start_date: body.start_date,
         discount_end_date: body.end_date,
@@ -30,7 +30,7 @@ const createDiscount=async (body:CreateDiscountCodeProps)=>{
         discount_user_used:body.user_used,
         discount_max_per_user_use:body.max_per_user_use,
         discount_min_order_value:body.min_order_value,
-        discount_shopId:body.shopId,
+        discount_shopId:convertToObjectId(body.shopId),
         discount_is_active:body.is_active,
         discount_applies_to:body.applies_to,
         discount_products_id:body.applies_to === "all" ? [] : body.products_id
@@ -38,14 +38,14 @@ const createDiscount=async (body:CreateDiscountCodeProps)=>{
     })
 }
 
-const findAllDiscountCodeUnSelect = async ({limit=50,page=1,sort='ctime',filter,unSelect,model}:FindAllProps)=>{
+const findAllDiscountCodeUnSelect = async ({limit=50,page=1,sort='ctime',filter,select,model}:FindAllProps)=>{
     const skip = (page-1)*limit;
     const allProduct = await model
     .find(filter)
     .sort(sort ==='ctime' ? {_id:-1} :{_id:1})
     .skip(skip)
     .limit(limit)
-    .select(getUnSelectData(unSelect))
+    .select(getSelectData(select))
     .lean()
     return allProduct;
 }

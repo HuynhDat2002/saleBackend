@@ -9,7 +9,7 @@ const discountSchema = new Schema({
         type:String,
         required:true,
     },
-   discount_descriptions: {
+    discount_descriptions: {
         type: String,
 
     },
@@ -69,6 +69,18 @@ const discountSchema = new Schema({
     discount_products_id:{ //so san pham duoc su dung
         type:Array,
         default:[]
+    },
+    discount_created_by:{
+        type:String,
+        required:true,
+        enum:['admin','shop']
+    },
+    discount_is_feeship:{
+        type:Boolean,
+        default:false
+    },
+    discount_adminId:{
+        type:String,
     }
 }, {
     timestamps: true,

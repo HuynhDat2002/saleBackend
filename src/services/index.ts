@@ -4,4 +4,17 @@ import * as apiKeyService from './apiKey.service'
 import * as shopService from './shop.service'
 import * as productService from './product.service'
 import * as discountService from './discount.service'
-export {accessService,keyTokenService,apiKeyService,shopService,productService,discountService}
+import * as checkoutService from './checkout.service'
+import * as inventoryService from './inventory.service'
+import * as commentService from './comment.service'
+export {
+    accessService,
+    keyTokenService,
+    apiKeyService,
+    shopService,
+    productService,
+    discountService,
+    checkoutService,
+    inventoryService,
+    commentService
+}

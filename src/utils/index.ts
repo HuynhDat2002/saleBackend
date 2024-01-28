@@ -5,7 +5,7 @@
 import _ from 'lodash'
 import {Types} from 'mongoose'
 
-const convertToObjectId = (id:string)=>{
+const convertToObjectId = (id:any)=>{
     return new Types.ObjectId(id)
 }
 
@@ -13,8 +13,8 @@ const getInfoData = (fields:string[],object={}) =>{
     return _.pick(object,fields)
 }
 
-const getSelectData = (select:[])=>{
-    return Object.fromEntries(select.map(e=>[e,1]))
+const getSelectData = (select:any)=>{ //select is a array
+    return Object.fromEntries(select.map((e:string)=>[e,1]))
 }
 const getUnSelectData = (unSelect:[])=>{
     return Object.fromEntries(unSelect.map(e=>[e,0]))

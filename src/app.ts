@@ -40,6 +40,11 @@ instanceMongodb
 // import {checkOverLoad} from '@/helpers'
 // checkOverLoad();
 
+
+// test pub.sub redis
+import '@/tests/inventory.test'
+import {purchaseProduct} from '@/tests/product.test'
+purchaseProduct('product:001',10)
 //---------------init routes-----------------
 
 app.use('/',router)

@@ -86,7 +86,7 @@ export const authentication  = asyncHandler( async (req:CustomRequest,res:Respon
 export const authenticationV2  = asyncHandler( async (req:CustomRequest,res:Response,next:NextFunction)=>{
     /*
         1. check userid missing?
-        2. get accessToken
+        2. check key store
         3. verify token
         4. check user in dbs
         5. check keystore with this userid

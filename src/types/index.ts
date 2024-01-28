@@ -54,6 +54,18 @@ export interface InsertInventoryRepositoryProps{
   location?:string,
 }
 
+export interface CheckoutReviewProps{
+  cartId:string,
+  userId:string,
+  shop_order_ids:any,
+  app_discount?:any,
+}
+
+export interface ReservationInventoryProps{
+  cartId:string,
+  productId:string,
+  quantity:number,
+}
 
 //--------------------------------configs--------------------------------
 export interface CustomRequest extends Request{
@@ -176,7 +188,7 @@ export interface GetAllProductByDiscountProps{
   }
 
   export interface GetDiscountAmountProps{
-    code:string,userId:string,shopId:string,products:any
+    code:string,userId:string,shopId?:string,adminId?:string,products:any
   }
 
   export interface DeleteDiscountCodeProps{
@@ -184,6 +196,54 @@ export interface GetAllProductByDiscountProps{
     shopId:string,
     userId?:string
   }
+
+  export interface AddToCartProps{
+    userId:string,
+    product:any
+  }
+
+  export interface UpdateUserCartV2Props{
+    userId:string,
+    shop_order_ids:any
+  }
+
+  export interface DeleteUserCartProps{
+    userId:string,
+    productId:string
+  }
+
+  export interface OrderByUserProps{
+    shop_order_ids:any,
+    cartId:string,
+    userId:string,
+    user_address:any,
+    user_payment:any
+  }
+
+  export interface AcquireLockProps{
+    productId:string,
+    quantity:number,
+    cartId:string,
+  }
+
+  export interface AddStockToInventoryProps{
+    stock:any,
+    productId:string,
+    shopId:string,
+    location:string
+  }
+
+ export interface CreateCommentProps{
+  productId:string,userId:string,content:any,parentCommentId:string|null
+ }
+ export interface GetCommentByParentIdProps{
+  productId:string,parentCommentId:string|null,limit?:number,offset?:number
+ }
+
+ export interface DeleteCommentProps{
+  commentId:string,
+  productId:string
+ }
 //--------------------------------Utils-------------------------------
 export interface PayloadTokenPair extends jwt.JwtPayload {
   userId?:string;
