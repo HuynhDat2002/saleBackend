@@ -5,6 +5,7 @@ import * as cartController from './cart.controller'
 import * as checkoutController from './checkout.controller'
 import * as inventoryController from './inventory.controller'
 import * as commentController from './comment.controller'
+import * as notificationController from './notification.controller'
 export {
     accessController,
     productController,
@@ -12,5 +13,6 @@ export {
     cartController,
     checkoutController,
     inventoryController,
-    commentController
+    commentController,
+    notificationController
 }

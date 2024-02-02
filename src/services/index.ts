@@ -7,6 +7,7 @@ import * as discountService from './discount.service'
 import * as checkoutService from './checkout.service'
 import * as inventoryService from './inventory.service'
 import * as commentService from './comment.service'
+import * as notificationService from './notification.service'
 export {
     accessService,
     keyTokenService,
@@ -16,5 +17,6 @@ export {
     discountService,
     checkoutService,
     inventoryService,
-    commentService
+    commentService,
+    notificationService
 }

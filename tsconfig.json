@@ -106,6 +106,6 @@
       "@/*": ["*"]
     } /* Skip type checking all .d.ts files. */
   },
-  "include": ["**/*.ts", "server.ts", "src/app.ts"],
+  "include": ["**/*.ts", "server.ts", "src/app.ts", "src/tests/rabbitmq/producer.ts", "src/tests/rabbitmq/consumer.ts"],
   "exclude": ["node_modules"]
 }

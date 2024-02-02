@@ -2,6 +2,7 @@
   "name": "backendlearning",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "server.ts",
   "_moduleAliases": {
     "@": "src"
@@ -22,6 +23,7 @@
     "@types/lodash": "^4.14.202",
     "@types/mongoose": "^5.11.97",
     "@types/redis": "^4.0.11",
+    "amqplib": "^0.10.3",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -40,6 +42,7 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.4",
     "@types/bcrypt": "^5.0.2",
     "@types/compression": "^1.7.5",
     "@types/morgan": "^1.9.9",

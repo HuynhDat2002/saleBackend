@@ -7,7 +7,7 @@ import { Request, Response, NextFunction } from 'express'
 import {errorResponse} from '@/core'
 import * as productRepository from '@/models/repositories/product.repository'
 import * as inventoryRepository from '@/models/repositories/inventory.repository'
-
+import { notificationService } from '@/services';
 import { ProductProps,CreateUpdateProductProps,FindProductProps,PublishProductByShopProps,
     UnPublishProductByShopProps,UpdateProductRepositoryProps } from '@/types'
 import {removeUndefinedObject,updateNestedObjectParser} from '@/utils'
@@ -157,6 +157,16 @@ export const createProduct = async ({type,payload}:CreateUpdateProductProps) => 
             stock:newProduct.product_quantity
         })
     }
+
+    await notificationService.pushNotiToSystem({
+        type:"SHOP-001",
+        receivedId:"1",
+        options:{
+            product_name:newProduct.product_name,
+            shop_name:newProduct.product_shop
+        },
+        senderId:newProduct.product_shop,
+    })
     return newProduct;
     // if(type==="Clothing"){
     //     const newClothing = await new Clothing(payload).createProduct()
