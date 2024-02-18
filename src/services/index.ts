@@ -8,6 +8,7 @@ import * as checkoutService from './checkout.service'
 import * as inventoryService from './inventory.service'
 import * as commentService from './comment.service'
 import * as notificationService from './notification.service'
+import * as uploadService from './upload.service'
 export {
     accessService,
     keyTokenService,
@@ -18,5 +19,6 @@ export {
     checkoutService,
     inventoryService,
     commentService,
-    notificationService
+    notificationService,
+    uploadService
 }

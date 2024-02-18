@@ -10,19 +10,19 @@ import {AcquireLockProps} from '@/types'
 import * as inventoryReposity from '@/models/repositories/inventory.repository'
 const redisClient = redis.createClient();
 
-const callback:any=async (err:any,result:any)=>{
-    if(err) {
-        console.error("Error connecting to Redis:: ",err);
-        return err
-    }
-    else{
-        console.log('Connected to Redis')
-        return await result
-    }
+// const callback:any=async (err:any,result:any)=>{
+//     if(err) {
+//         console.error("Error connecting to Redis:: ",err);
+//         return err
+//     }
+//     else{
+//         console.log('Connected to Redis')
+//         return await result
+//     }
     
-}
+// }
 
-redisClient.ping(callback)
+// redisClient.ping(callback)
 const pexpire = promisify(redisClient.pExpire).bind(redisClient)
 
 const setnxAsync = promisify(redisClient.setNX).bind(redisClient)

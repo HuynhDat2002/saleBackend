@@ -13,6 +13,7 @@ import inventoryRouter from './inventory';
 import { pushToLogDiscord } from '@/middlewares';
 import commentRouter from './comment'
 import notificationRouter from './notification';
+import uploadRouter from './upload';
 // add log to discord
 router.use(pushToLogDiscord)
 // check api key
@@ -31,6 +32,7 @@ router.use('/v1/api/checkout',checkoutRouter)
 router.use('/v1/api/inventory',inventoryRouter)
 router.use('/v1/api/comment',commentRouter)
 router.use('/v1/api/notification',notificationRouter)
+router.use('/v1/api/upload',uploadRouter)
 
 
 
