@@ -55,7 +55,7 @@ app.use((req:Request,res:Response,next:NextFunction)=>{
     error.status = 404;
     next(error);
 })
- app.use((error:any,req:Request,res:Response,next:NextFunction) => {
+app.use((error:any,req:Request,res:Response,next:NextFunction) => {
      const status = error.status || 500;
      return res.status(status).json({
         status: "error",

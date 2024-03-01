@@ -19,7 +19,7 @@ export const uploadImageFromURL = async ()=>{
 }
 
 
-export const uploadImageFromLocal = async ({path,folderName}:UploadImage)=>{
+export const uploadImageFromLocal = async ({path,folderName='product/shopId'}:UploadImage)=>{
  
 
 
@@ -31,7 +31,12 @@ export const uploadImageFromLocal = async ({path,folderName}:UploadImage)=>{
     return {
         image_url:result.secure_url,
         folder:result.folder,
-        shopId:8089
+        shopId:8089,
+        thumb_url: await cloudinary.url(result.public_id,{
+            height:100,
+            width:100,
+            format:'jpg'
+        })
 
     };
 }

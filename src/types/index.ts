@@ -247,7 +247,7 @@ export interface GetAllProductByDiscountProps{
 
  export interface UploadImage{
   path:string,
-  folderName:string
+  folderName?:string
  }
 //--------------------------------Utils-------------------------------
 export interface PayloadTokenPair extends jwt.JwtPayload {

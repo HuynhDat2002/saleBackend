@@ -50,3 +50,4 @@ create table users (
 insert into users (user_id,user_age, user_status, user_name,user_email,user_address) values (
 	3, 22,1,'user3','user3@gmail.com','cmt8,hcm'
 )
+

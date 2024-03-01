@@ -4,20 +4,21 @@
 
 import multer from 'multer'
 
-//memory
+//memory: sử dụng bộ nhớ trong máy
 
-const uploadMemory = multer({
+export const uploadMemory = multer({
     storage:multer.memoryStorage()
 })
 
-const uploadDisk = multer({
+
+// nên sử dụng disk để tránh ảnh hưởng bộ nhớ
+export const uploadDisk = multer({
     storage:multer.diskStorage({
         destination:(res,file,cb)=>{
-            cb(null,'./src/uploads')
+            cb(null,'./src/uploads/')
         },
         filename:(res,file,cb)=>{
-            const uniqueSuffix = Date.now()+'-'+Math.round(Math.random()+1E9)
-            cb(null,file.filename +'-'+uniqueSuffix)
+            cb(null,`${Date.now()}-${file.originalname}`)
 
         }
     })
