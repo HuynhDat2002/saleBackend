@@ -26,12 +26,12 @@ app.use(morgan("dev")) //trạng thái code được tô màu
 
 app.use(helmet()) // giúp bảo mật app bên server bằng cách đặt các header bảo mật HTTP khác nhau
 app.use(compression()) // giảm băng thông
-app.use(cors())
-app.use(express.json())
+app.use(cors()) // giúp trao đổi taì nguyên chéo
+app.use(express.json()) //giúp phân tích các yêu cầu gửi đến với dữ liệu định dạng JSON và đặt dữ liệu đã phân tích vào req.body
 app.use(express.urlencoded({ extended: true }));
 
 // app.use(bodyParser.json());
-app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(cookieParser(process.env.SESSION_SECRET)); //giúp phân tích các cookie gửi đến từ máy khách (client) và đặt dữ liệu cookie đã phân tích vào req.cookies
 
 //---------------init db------------------
 import {instanceMongodb} from '@/db'
