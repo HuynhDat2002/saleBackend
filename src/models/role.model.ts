@@ -8,17 +8,15 @@ const COLLECTION_NAME = 'Roles'
 
 // const grantList=[
 //     {role:'admin',resource:'profile',action:'update:any',attributes:'*'},
-//     {role:'admin',resource:'balance',action:'update:any',attributes:'*,unmount'},
+//     {role:'admin',resource:'balance',action:'update:any',attributes:'*,!mount'},
 
 
 //     {role:'shop',resource:'profile',action:'update:own',attributes:'*'},
-//     {role:'shop',resource:'balance',action:'update:own',attributes:'*,unmount'},
+//     {role:'shop',resource:'balance',action:'update:own',attributes:'*,!mount'},
 
 
 //     {role:'user',resource:'profile',action:'update:own',attributes:'*'},
-//     {role:'user',resource:'balance',action:'read:own',attributes:'*'}
-
-
+//     {role:'user',resource:'profile',action:'read:own',attributes:'*'}
 // ]
 
 const roleSchema = new Schema({

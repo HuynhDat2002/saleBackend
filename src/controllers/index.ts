@@ -7,6 +7,8 @@ import * as inventoryController from './inventory.controller'
 import * as commentController from './comment.controller'
 import * as notificationController from './notification.controller'
 import * as uploadController from './upload.controller'
+import * as profileController from './profile.controller'
+import * as rbacController from './rbac.controller'
 export {
     accessController,
     productController,
@@ -16,5 +18,7 @@ export {
     inventoryController,
     commentController,
     notificationController,
-    uploadController
+    uploadController,
+    profileController,
+    rbacController
 }

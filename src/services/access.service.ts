@@ -217,12 +217,10 @@ export const handleRefreshTokenV2 = async ({refreshToken,keyStore,user}:HandleRe
         
         //delete all of token in keyStore
         const deleteToken = await keyTokenService.deleteTokenById(userId)
-        throw new errorResponse.ForbiddenRequestError("Something wrong happed! Please login again")
-        
+        throw new errorResponse.ForbiddenRequestError("Something wrong happed! Please login again") 
     }
     
     if(keyStore.refreshToken!==refreshToken) throw new errorResponse.AuthFailureError("User not registered")
-
    
     const foundUser = await shopService.findByEmail({email})
     if(!foundUser) throw new errorResponse.AuthFailureError("User not registered");

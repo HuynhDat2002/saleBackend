@@ -14,6 +14,8 @@ import { pushToLogDiscord } from '@/middlewares';
 import commentRouter from './comment'
 import notificationRouter from './notification';
 import uploadRouter from './upload';
+import profileRouter from './profile';
+import rbacRouter from './rbac';
 // add log to discord
 router.use(pushToLogDiscord)
 // check api key
@@ -33,6 +35,8 @@ router.use('/v1/api/inventory',inventoryRouter)
 router.use('/v1/api/comment',commentRouter)
 router.use('/v1/api/notification',notificationRouter)
 router.use('/v1/api/upload',uploadRouter)
+router.use('/v1/api/profile',profileRouter)
+router.use('/v1/api/rbac',rbacRouter)
 
 
 

@@ -49,6 +49,9 @@ const updateNestedObjectParser = (obj:any)=>{
     return final;
 }
 
+const randomProductId = (_?:any)=>{
+    return Math.floor(Math.random() * 899999 + 100000)
+}
 export {
     getInfoData,
     getSelectData,
@@ -56,4 +59,5 @@ export {
     removeUndefinedObject,
     updateNestedObjectParser,
     convertToObjectId,
+    randomProductId
 }

@@ -9,6 +9,10 @@ import * as inventoryService from './inventory.service'
 import * as commentService from './comment.service'
 import * as notificationService from './notification.service'
 import * as uploadService from './upload.service'
+import * as rbacService from './rbac.service'
+import * as spuService from './spu.service'
+import * as skuService from './sku.service'
+
 export {
     accessService,
     keyTokenService,
@@ -20,5 +24,8 @@ export {
     inventoryService,
     commentService,
     notificationService,
-    uploadService
+    uploadService,
+    rbacService,
+    spuService,
+    skuService
 }

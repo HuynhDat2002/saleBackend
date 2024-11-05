@@ -22,8 +22,8 @@ import * as Redis from 'redis'
 //         })   
 //     }
 // }
-const subscriber = Redis.createClient()
-const publisher = Redis.createClient()
+const subscriber = Redis.createClient({ url: "redis://default:pyFDvQLFTafTwKZ4QuVTYynBWDrjxcE3@redis-11938.c15.us-east-1-2.ec2.redns.redis-cloud.com:11938" })
+const publisher = Redis.createClient({ url: "redis://default:pyFDvQLFTafTwKZ4QuVTYynBWDrjxcE3@redis-11938.c15.us-east-1-2.ec2.redns.redis-cloud.com:11938" })
 
 export const publish = async (channel:any,message:any) =>{
     await publisher.connect();

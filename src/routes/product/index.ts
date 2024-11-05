@@ -13,11 +13,15 @@ productRouter.get('/search/:keySearch',asyncHandler(productController.searchProd
 productRouter.get('/published/all',asyncHandler(productController.findAllPublishedForShop))
 productRouter.get('/',asyncHandler(productController.findAllProduct))
 productRouter.get('/:id',asyncHandler(productController.findProduct))
+productRouter.get('/sku/search',asyncHandler(productController.findSku))
+productRouter.get('/spu/search',asyncHandler(productController.findSpu))
+
 
 
 
 //use for shop
 productRouter.use(authentication);
+productRouter.post('/spu/new',asyncHandler(productController.createSpu))
 
 productRouter.post('/create-product',asyncHandler(productController.createProduct))
 productRouter.post('/publish/:id',asyncHandler(productController.publishProductByShop))

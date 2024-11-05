@@ -19,6 +19,10 @@ const userSchema = new Schema({
     usr_birthday:{type:Date,default:null},
     usr_role:{type:Schema.Types.ObjectId,ref:'Role'},
     usr_status:{type:String,default:'pending',enum:['pending','active','blocked']}
+},
+{
+    timestamps:true,
+    collection:COLLECTION_NAME
 })
 
 const userModel = model(DOCUMENT_NAME,userSchema)
