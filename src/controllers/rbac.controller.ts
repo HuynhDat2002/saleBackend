@@ -8,12 +8,10 @@ export const newRole = async (
     res: Response,
     next: NextFunction
 ) => {
-
     new successResponse.CREATED({
         message: "create role",
         metadata: await rbacService.createRole(req.body)
     }).send(res)
-
 }
 
 export const newResource = async (

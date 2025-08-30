@@ -7,7 +7,7 @@ import helmet from "helmet"
 import compression from "compression";
 import cors from 'cors'
 import 'module-alias/register';
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 import  'dotenv/config';
